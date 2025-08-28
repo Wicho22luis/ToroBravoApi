@@ -1,21 +1,13 @@
-import express from 'express';
+import express from "express";
+import cors from "cors";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 
-app.get("/login", async (req, res) => {
-  try {
-    const { usuario, password } = req.query;
+app.use("/Auth", authRoutes);
 
-    const [rows] = await pool.query("CALL sp_login(?, ?)", [usuario, password]);
-
-    res.json(rows[0]); 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error en el servidor" });
-  }
+app.listen(3001, () => {
+  console.log("🚀 Server listening on port 3001");
 });
-
-
-app.listen (3001, () =>{
-    console.log("Server listening on port 3001");
-})
